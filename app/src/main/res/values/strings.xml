@@ -1,8 +1,8 @@
 <resources>
 
     <!--app name-->
-    <string name="app_name">Mobikul POS - Point of Sale</string>
-    <string name="new_version_available">There is a newer version of Mobikul POS application
+    <string name="app_name">One4Pay - Point of Sale</string>
+    <string name="new_version_available">There is a newer version of One4Pay POS application
         , please Update now?</string>
     <string name="update">Update</string>
     <string name="later">Later</string>
@@ -33,7 +33,7 @@
     <string name="password">Password</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="_2014_copyright_brand_or_company_all_rights_reserved">© 2014 Copyright Brand or Company.\n All rights reserved.</string>
+    <string name="_2014_copyright_brand_or_company_all_rights_reserved">© 2022 Copyright One4Pay.\n All rights reserved.</string>
     <!---->
     <!---->
     <!-- Actionbar related strings -->

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#ff5f33</color>
-    <color name="colorAccent">#FF7852</color>
+    <color name="colorPrimary">#026fad</color>
+    <color name="colorPrimaryDark">#2f98d3</color>
+    <color name="colorAccent">#97CCFB</color>
     <color name="gray">#626262</color>
     <color name="white">#FFFFFF</color>
     <!-- Home Page related colors-->
@@ -12,7 +12,7 @@
 
     <!--some view's colors-->
     <color name="buttonBackgroundColor">@color/colorAccent</color>
-    <color name="buttonBackgroundColorDark">#e63200</color>
+    <color name="buttonBackgroundColorDark">#026fad</color>
     <color name="toastTextColor">@color/colorAccent</color>
 
     <!--text colors-->
