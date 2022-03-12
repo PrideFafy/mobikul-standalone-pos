@@ -24,6 +24,7 @@ import com.webkul.mobikul.mobikulstandalonepos.helper.AppSharedPref;
 import com.webkul.mobikul.mobikulstandalonepos.helper.Helper;
 import com.webkul.mobikul.mobikulstandalonepos.model.CashModel;
 import com.webkul.mobikul.mobikulstandalonepos.model.TotalModel;
+import com.webkul.mobikul.mobikulstandalonepos.utils.MagneticCardUtil;
 
 import static android.content.ContentValues.TAG;
 
@@ -56,7 +57,8 @@ public class CheckoutHandler {
     }
 
     public void magneticPayment(TotalModel totalModel){
-
+        MagneticCardUtil.init(context);
+        MagneticCardUtil.swipe();
     }
 
     public void orderPlaced(CashModel cashData, TotalModel totalData) {
