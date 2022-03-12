@@ -19,14 +19,13 @@ import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+
+import com.journeyapps.barcodescanner.ViewfinderView;
 import com.webkul.mobikul.mobikulstandalonepos.BuildConfig;
 import com.webkul.mobikul.mobikulstandalonepos.R;
 import com.webkul.mobikul.mobikulstandalonepos.connections.VersionChecker;
@@ -59,71 +58,26 @@ public class SplashScreenActivity extends AppCompatActivity {
     private String currentVersion = "1.0";
     private boolean isInternetAvailable;
     private SweetAlertDialog sweetAlert;
-    FirebaseRemoteConfig mFirebaseRemoteConfig;
+    private TextView versionText;
     private boolean isFetched = false;
     //The Android's default system path of your application database.
 
-    public void initializeFirebase() {
-        if (FirebaseApp.getApps(this).isEmpty()) {
-            FirebaseApp.initializeApp(this, FirebaseOptions.fromResource(this));
-        }
-        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-        // [END get_remote_config_instance]
-
-        // Create a Remote Config Setting to enable developer mode, which you can use to increase
-        // the number of fetches available per hour during development. See Best Practices in the
-        // README for more information.
-        // [START enable_dev_mode]
-        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-                .setDeveloperModeEnabled(BuildConfig.DEBUG)
-                .build();
-        mFirebaseRemoteConfig.setConfigSettings(configSettings);
-        // [END enable_dev_mode]
-
-        // Set default Remote Config parameter values. An app uses the in-app default values, and
-        // when you need to adjust those defaults, you set an updated value for only the values you
-        // want to change in the Firebase console. See Best Practices in the README for more
-        // information.
-        // [START set_default_values]
-        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
-        // [END set_default_values]
-    }
 
     void fetch() {
         long cacheExpiration = 3600; // 1 hour in seconds.
         // If your app is using developer mode, cacheExpiration is set to 0, so each fetch will
         // retrieve values from the service.
-        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
-            cacheExpiration = 0;
-        }
-        mFirebaseRemoteConfig.fetch(cacheExpiration)
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-//                            Toast.makeText(SplashScreenActivity.this, "Fetch Succeeded",
-//                                    Toast.LENGTH_SHORT).show();
-                            isFetched = true;
-                            // After config data is successfully fetched, it must be activated before newly fetched
-                            // values are returned.
-                            mFirebaseRemoteConfig.activateFetched();
-                        } else {
-//                            fetch();
-//                            Toast.makeText(SplashScreenActivity.this, "Fetch Failed",
-//                                    Toast.LENGTH_SHORT).show();
-                        }
-                        displayWelcomeMessage();
-                    }
-                });
+
+
     }
 
     private void displayWelcomeMessage() {
-        latestVersion = FirebaseRemoteConfig.getInstance().getString(
-                "android_latest_version_name");
+
         Log.d(TAG, "onCreate: " + latestVersion);
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
             currentVersion = pInfo.versionName;
+            versionText.setText(currentVersion);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -134,8 +88,9 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        initializeFirebase();
+versionText = findViewById(R.id.versionNumber);
         checkDataBase();
+        displayWelcomeMessage();
         //            latestVersion = new VersionChecker().execute().get();
     }
 

@@ -55,6 +55,10 @@ public class CheckoutHandler {
         fragmentTransaction.addToBackStack(fragment.getClass().getSimpleName()).commit();
     }
 
+    public void magneticPayment(TotalModel totalModel){
+
+    }
+
     public void orderPlaced(CashModel cashData, TotalModel totalData) {
         if (isValidated(cashData)) {
             Intent i = new Intent(context, PlaceOrderActivity.class);

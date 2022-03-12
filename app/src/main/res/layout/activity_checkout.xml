@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -24,9 +26,7 @@
             type="com.webkul.mobikul.mobikulstandalonepos.handlers.CheckoutHandler" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.webkul.mobikul.mobikulstandalonepos.activity.Checkout">
@@ -132,6 +132,41 @@
                             android:layout_gravity="center"
                             android:onClick="@{()->handler.cashPayment(data.totals)}"
                             android:text="Cash"
+                            android:textColor="@color/secondaryTextColor"
+                            android:textSize="@dimen/text_size_medium" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+<!--                <Button-->
+<!--                    android:id="@+id/cc_button"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Pay By Card" />-->
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_generic"
+                    app:contentPadding="@dimen/spacing_normal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onClick="@{()->handler.magneticPayment(data.totals)}"
+                            android:padding="@dimen/spacing_normal"
+                            app:srcCompat="@drawable/ic_payment_mode_cash" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:onClick="@{()->handler.magneticPayment(data.totals)}"
+                            android:text="Bank"
                             android:textColor="@color/secondaryTextColor"
                             android:textSize="@dimen/text_size_medium" />
                     </LinearLayout>
