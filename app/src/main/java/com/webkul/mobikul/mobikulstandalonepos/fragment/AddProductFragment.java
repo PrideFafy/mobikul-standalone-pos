@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -36,6 +37,7 @@ import com.webkul.mobikul.mobikulstandalonepos.helper.SweetAlertBox;
 import com.webkul.mobikul.mobikulstandalonepos.interfaces.DataBaseCallBack;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
@@ -172,13 +174,35 @@ public class AddProductFragment extends Fragment {
         product.setBarCode(text);
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
-            BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.CODABAR, 380, 100);
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+            Bitmap bitmap = CreateCode(text, BarcodeFormat.CODE_128, 320, 120);
             binding.barCode.setImageBitmap(bitmap);
         } catch (WriterException e) {
             e.printStackTrace();
         }
+    }
+
+    public Bitmap CreateCode(String str, com.google.zxing.BarcodeFormat type, int bmpWidth, int bmpHeight) throws WriterException {
+        Hashtable<EncodeHintType,String> mHashtable = new Hashtable<EncodeHintType,String>();
+        mHashtable.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+        // 生成二维矩阵,编码时要指定大小,不要生成了图片以后再进行缩放,以防模糊导致识别失败
+        BitMatrix matrix = new MultiFormatWriter().encode(str, type, bmpWidth, bmpHeight, mHashtable);
+        int width = matrix.getWidth();
+        int height = matrix.getHeight();
+        // 二维矩阵转为一维像素数组（一直横着排）
+        int[] pixels = new int[width * height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (matrix.get(x, y)) {
+                    pixels[y * width + x] = 0xff000000;
+                } else {
+                    pixels[y * width + x] = 0xffffffff;
+                }
+            }
+        }
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        // 通过像素数组生成bitmap,具体参考api
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        return bitmap;
     }
 
 
