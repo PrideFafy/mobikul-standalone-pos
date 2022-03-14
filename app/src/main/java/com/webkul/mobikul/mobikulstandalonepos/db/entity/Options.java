@@ -1,9 +1,8 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
+
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
+
 import android.arch.persistence.room.TypeConverters;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -15,25 +14,32 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * Created by aman.gupta on 15/2/18. @Webkul Software Private limited
  */
 @Entity
 public class Options extends BaseObservable implements Serializable {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "option_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "nadministrator_id_seq")
+    @Column(name = "option_id")
     private int optionId;
 
-    @ColumnInfo(name = "option_name")
+    @Column(name = "option_name")
     private String optionName;
 
-    @ColumnInfo(name = "option_type")
+    @Column(name = "option_type")
     private String type;
 
-    @ColumnInfo(name = "option_values")
+    @Column(name = "option_values")
     private List<OptionValues> optionValues;
 
-    @ColumnInfo(name = "sort_order")
+    @Column(name = "sort_order")
     private int sortOrder;
     @Ignore
     private boolean selected;

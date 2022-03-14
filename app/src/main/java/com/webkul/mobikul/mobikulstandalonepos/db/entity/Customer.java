@@ -1,9 +1,9 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
+
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
+
+
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -21,6 +21,12 @@ import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.TAG;
 import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.getContext;
 import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_9_CUSTOMER_ALL_READY_EXIST;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * Created by aman.gupta on 23/1/18. @Webkul Software Private limited
  */
@@ -28,34 +34,35 @@ import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConst
 @Entity
 public class Customer extends BaseObservable implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "nadministrator_id_seq")
     private int customerId;
 
-    @ColumnInfo(name = "customer_first_name")
+    @Column(name = "customer_first_name")
     private String firstName;
 
-    @ColumnInfo(name = "customer_last_name")
+    @Column(name = "customer_last_name")
     private String lastName;
 
-    @ColumnInfo(name = "email")
+    @Column(name = "email")
     private String email;
 
-    @ColumnInfo(name = "contact_number")
+    @Column(name = "contact_number")
     private String contactNumber;
 
-    @ColumnInfo(name = "address_line")
+    @Column(name = "address_line")
     private String addressLine;
 
-    @ColumnInfo(name = "city")
+    @Column(name = "city")
     private String city;
 
-    @ColumnInfo(name = "postal_code")
+    @Column(name = "postal_code")
     private String postalCode;
 
-    @ColumnInfo(name = "state")
+    @Column(name = "state")
     private String state;
 
-    @ColumnInfo(name = "country")
+    @Column(name = "country")
     private String country;
 
     @Ignore

@@ -1,9 +1,7 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
+
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.util.Log;
@@ -11,19 +9,26 @@ import android.util.Patterns;
 
 import com.webkul.mobikul.mobikulstandalonepos.BR;
 
-@Entity(tableName = "Administrator")
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity(name = "Administrator")
 public class Administrator extends BaseObservable {
-    @PrimaryKey(autoGenerate = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "nadministrator_id_seq")
     private int uid;
-    @ColumnInfo(name = "first_name")
+    @Column(name = "first_name")
     private String firstName;
-    @ColumnInfo(name = "last_name")
+    @Column(name = "last_name")
     private String lastName;
-    @ColumnInfo(name = "email")
+    @Column(name = "email")
     private String email;
-    @ColumnInfo(name = "username")
+    @Column(name = "username")
     private String username;
-    @ColumnInfo(name = "password")
+    @Column(name = "password")
     private String password;
     @Ignore
     private String newPassword;

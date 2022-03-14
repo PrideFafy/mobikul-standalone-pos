@@ -35,7 +35,7 @@ public class SignUpSignInActivity extends BaseActivity {
         if (!AppSharedPref.isSignedUp(this, false)) {
             fragment = new SignUpFragment();
         } else {
-            fragment = new SignInFragment();
+            fragment = new SignUpFragment();
         }
         fragmentTransaction.add(mBinding.fragmentContainer.getId(), fragment, fragment.getClass().getSimpleName());
         fragmentTransaction.addToBackStack(SignUpFragment.class.getSimpleName());

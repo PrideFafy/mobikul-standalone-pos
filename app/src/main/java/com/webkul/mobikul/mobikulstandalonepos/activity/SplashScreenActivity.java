@@ -25,11 +25,13 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import com.j256.ormlite.support.ConnectionSource;
 import com.journeyapps.barcodescanner.ViewfinderView;
 import com.webkul.mobikul.mobikulstandalonepos.BuildConfig;
 import com.webkul.mobikul.mobikulstandalonepos.R;
 import com.webkul.mobikul.mobikulstandalonepos.connections.VersionChecker;
 import com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants;
+import com.webkul.mobikul.mobikulstandalonepos.db.ORMDataSource;
 import com.webkul.mobikul.mobikulstandalonepos.helper.AppSharedPref;
 import com.webkul.mobikul.mobikulstandalonepos.helper.Helper;
 import com.webkul.mobikul.mobikulstandalonepos.helper.SweetAlertBox;
@@ -91,6 +93,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 versionText = findViewById(R.id.versionNumber);
         checkDataBase();
         displayWelcomeMessage();
+        checkPostgres();
         //            latestVersion = new VersionChecker().execute().get();
     }
 
@@ -114,6 +117,17 @@ versionText = findViewById(R.id.versionNumber);
             AppSharedPref.setSignedUp(this, true);
         }
         return checkDB != null;
+    }
+
+    private boolean checkPostgres(){
+        ConnectionSource connectionSource = null;
+        try{
+            connectionSource = ORMDataSource.createDataSource();
+            Helper.setDefaultConnection(connectionSource);
+        }catch (Exception e){
+            Log.d(TAG, "check Postgres Connection: Exception " + e);
+        }
+        return  connectionSource !=null;
     }
 
     @Override

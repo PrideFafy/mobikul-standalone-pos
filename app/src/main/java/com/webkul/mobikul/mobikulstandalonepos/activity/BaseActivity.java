@@ -14,12 +14,14 @@ import android.widget.Toast;
 
 import com.webkul.mobikul.mobikulstandalonepos.R;
 import com.webkul.mobikul.mobikulstandalonepos.db.AppDatabase;
+import com.webkul.mobikul.mobikulstandalonepos.db.POSConn;
 import com.webkul.mobikul.mobikulstandalonepos.helper.AppSharedPref;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import static com.webkul.mobikul.mobikulstandalonepos.db.AppDatabase.destroyDbInstance;
 import static com.webkul.mobikul.mobikulstandalonepos.db.AppDatabase.getAppDatabase;
+import static com.webkul.mobikul.mobikulstandalonepos.db.POSConn.getPostDB;
 
 /**
  * Created by aman.gupta on 4/1/17. @Webkul Software Private limited
@@ -32,6 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public FragmentManager mSupportFragmentManager;
     public AppDatabase db;
     public static Context context;
+    public POSConn posConn;
 
     @SuppressLint("CommitPrefEdits")
     @Override
@@ -39,6 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mSupportFragmentManager = getSupportFragmentManager();
         db = getDb();
+        posConn = postDB();
         context = this;
         showBackButton(true);
     }
@@ -46,6 +50,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     public AppDatabase getDb() {
         return getAppDatabase(this);
     }
+
+    public POSConn postDB(){
+        return getPostDB();
+    }
+
 
     public static Context getContext() {
         return context;

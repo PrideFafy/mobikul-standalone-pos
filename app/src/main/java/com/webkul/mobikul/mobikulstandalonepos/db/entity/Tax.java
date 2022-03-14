@@ -1,9 +1,7 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
+
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
@@ -11,25 +9,32 @@ import com.webkul.mobikul.mobikulstandalonepos.BR;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * Created by aman.gupta on 26/2/18. @Webkul Software Private limited
  */
 @Entity
 public class Tax extends BaseObservable implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "nadministrator_id_seq")
     private int taxId;
 
-    @ColumnInfo(name = "tax_name")
+    @Column(name = "tax_name")
     private String taxName;
 
-    @ColumnInfo(name = "is_enabled")
+    @Column(name = "is_enabled")
     private boolean enabled;
 
-    @ColumnInfo(name = "type")
+    @Column(name = "type")
     private String type;
 
-    @ColumnInfo(name = "tax_rate")
+    @Column(name = "tax_rate")
     private String taxRate;
 
     @Ignore

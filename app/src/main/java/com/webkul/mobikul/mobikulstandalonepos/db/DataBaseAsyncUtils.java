@@ -6,6 +6,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DaoManager;
 import com.webkul.mobikul.mobikulstandalonepos.db.converters.DataConverter;
 import com.webkul.mobikul.mobikulstandalonepos.db.entity.Administrator;
 import com.webkul.mobikul.mobikulstandalonepos.db.entity.CashDrawerModel;
@@ -16,7 +18,9 @@ import com.webkul.mobikul.mobikulstandalonepos.db.entity.Options;
 import com.webkul.mobikul.mobikulstandalonepos.db.entity.OrderEntity;
 import com.webkul.mobikul.mobikulstandalonepos.db.entity.Product;
 import com.webkul.mobikul.mobikulstandalonepos.db.entity.Tax;
+import com.webkul.mobikul.mobikulstandalonepos.db.model.NAdministrator;
 import com.webkul.mobikul.mobikulstandalonepos.helper.AppSharedPref;
+import com.webkul.mobikul.mobikulstandalonepos.helper.Helper;
 import com.webkul.mobikul.mobikulstandalonepos.interfaces.DataBaseCallBack;
 
 import java.util.List;
@@ -42,6 +46,7 @@ public class DataBaseAsyncUtils {
 
         private final DataBaseCallBack dataBaseCallBack;
         private AppDatabase db;
+        private ORMDataSource dataSource;
 
         GetAdminByEmailAsyncTask(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
             db = userDatabase;
@@ -86,6 +91,13 @@ public class DataBaseAsyncUtils {
             Administrator administrator;
             try {
                 administrator = db.administratorDao().getAll();
+                NAdministrator nAdministrator ;
+
+                Dao<NAdministrator,Integer> nAdministratorsDao =
+                        DaoManager.createDao(Helper.defaultCon, NAdministrator.class);
+                nAdministratorsDao.queryForAll();
+
+
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -118,6 +130,15 @@ public class DataBaseAsyncUtils {
         protected Boolean doInBackground(Administrator... administrators) {
             try {
                 db.administratorDao().insertAll(administrators);
+                Dao<NAdministrator,Integer> nAdministratorsDao =
+                        DaoManager.createDao(Helper.defaultCon, NAdministrator.class);
+                NAdministrator nAdministrator = new NAdministrator();
+                nAdministrator.setEmail("admin");
+                nAdministrator.setFirstName("admin");
+                nAdministrator.setLastName("admin");
+                nAdministrator.setPassword("admin");
+               // nAdministratorsDao.create(nAdministrator);
+                nAdministratorsDao.createIfNotExists(nAdministrator);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;

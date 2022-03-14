@@ -1,34 +1,38 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
+
 
 import com.webkul.mobikul.mobikulstandalonepos.db.converters.DataConverter;
 import com.webkul.mobikul.mobikulstandalonepos.model.CartModel;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Created by aman.gupta on 5/2/18. @Webkul Software Private limited
  */
 @Entity
 public class HoldCart {
-    @PrimaryKey(autoGenerate = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "nadministrator_id_seq")
     private long holdCartId;
 
-    @ColumnInfo(name = "time")
+    @Column(name = "time")
     private String time;
-    @ColumnInfo(name = "date")
+    @Column(name = "date")
     private String date;
 
-    @TypeConverters(DataConverter.class)
-    @ColumnInfo(name = "cart_data")
+    //@TypeConverters(DataConverter.class)
+    @Column(name = "cart_data")
     private CartModel cartData;
 
-    @ColumnInfo(name = "qty")
+    @Column(name = "qty")
     private String qty;
 
-    @ColumnInfo(name = "is_synced")
+    @Column(name = "is_synced")
     private String isSynced;
 
     public String getIsSynced() {

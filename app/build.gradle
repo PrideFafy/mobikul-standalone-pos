@@ -128,6 +128,16 @@ dependencies {
     implementation files('libs/core-3.1.0.jar')
     implementation files('libs/emv_pro4.0.jar')
     implementation 'org.postgresql:postgresql:42.2.5.jre7'
+    // https://mvnrepository.com/artifact/com.j256.ormlite/ormlite-jdbc
+    implementation group: 'com.j256.ormlite', name: 'ormlite-jdbc', version: '6.1'
+
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
+
+    // https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api
+    implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
+
+
 
 }
 apply plugin: 'com.google.gms.google-services'

@@ -1,9 +1,7 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
+
+
 
 import com.webkul.mobikul.mobikulstandalonepos.db.converters.DataConverter;
 import com.webkul.mobikul.mobikulstandalonepos.model.CartModel;
@@ -16,52 +14,56 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /**
  * Created by aman.gupta on 15/2/18. @Webkul Software Private limited
  */
 @Entity
 public class CashDrawerModel implements Serializable {
 
-    @PrimaryKey
-    @ColumnInfo(name = "date")
+    @Id
+    @Column(name = "date")
     @NotNull
     private String date;
 
-    @TypeConverters(DataConverter.class)
-    @ColumnInfo(name = "cash_drawer_items")
+    //@TypeConverters(DataConverter.class)
+    @Column(name = "cash_drawer_items")
     private List<CashDrawerItems> cashDrawerItems;
 
-    @ColumnInfo(name = "opening_balance")
+    @Column(name = "opening_balance")
     private String openingBalance;
 
-    @ColumnInfo(name = "formatted_opening_balance")
+    @Column(name = "formatted_opening_balance")
     private String formattedOpeningBalance;
 
-    @ColumnInfo(name = "closing_balance")
+    @Column(name = "closing_balance")
     private String closingBalance;
 
-    @ColumnInfo(name = "formatted_closing_balance")
+    @Column(name = "formatted_closing_balance")
     private String formattedClosingBalance;
 
-    @ColumnInfo(name = "net_revenue")
+    @Column(name = "net_revenue")
     private String netRevenue;
 
-    @ColumnInfo(name = "formatted_net_revenue")
+    @Column(name = "formatted_net_revenue")
     private String formattedNetRevenue;
 
-    @ColumnInfo(name = "in_amount")
+    @Column(name = "in_amount")
     private String inAmount;
 
-    @ColumnInfo(name = "formatted_in_amount")
+    @Column(name = "formatted_in_amount")
     private String formattedInAmount;
 
-    @ColumnInfo(name = "out_amount")
+    @Column(name = "out_amount")
     private String outAmount;
 
-    @ColumnInfo(name = "formatted_out_amount")
+    @Column(name = "formatted_out_amount")
     private String formattedOutAmount;
 
-    @ColumnInfo(name = "is_synced")
+    @Column(name = "is_synced")
     private String isSynced;
 
     public String getOpeningBalance() {

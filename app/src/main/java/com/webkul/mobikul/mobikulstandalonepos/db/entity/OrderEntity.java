@@ -1,9 +1,7 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverter;
+
+
 import android.arch.persistence.room.TypeConverters;
 
 import com.webkul.mobikul.mobikulstandalonepos.db.converters.DataConverter;
@@ -12,37 +10,44 @@ import com.webkul.mobikul.mobikulstandalonepos.model.CashModel;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * Created by aman.gupta on 25/1/18. @Webkul Software Private limited
  */
-@Entity(tableName = "OrderEntity")
+@Entity(name = "OrderEntity")
 public class OrderEntity implements Serializable {
-    @PrimaryKey(autoGenerate = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "nadministrator_id_seq")
     private long orderId;
 
-    @ColumnInfo(name = "time")
+    @Column(name = "time")
     private String time;
-    @ColumnInfo(name = "date")
+    @Column(name = "date")
     private String date;
 
     @TypeConverters(DataConverter.class)
-    @ColumnInfo(name = "cart_data")
+    @Column(name = "cart_data")
     private CartModel cartData;
 
-    @ColumnInfo(name = "qty")
+    @Column(name = "qty")
     private String qty;
 
     @TypeConverters(DataConverter.class)
-    @ColumnInfo(name = "cash_data")
+    @Column(name = "cash_data")
     private CashModel cashData;
 
-    @ColumnInfo(name = "is_synced")
+    @Column(name = "is_synced")
     private String isSynced;
 
-    @ColumnInfo(name = "is_return")
+    @Column(name = "is_return")
     private boolean isReturn;
 
-    @ColumnInfo(name = "refunded_order_id")
+    @Column(name = "refunded_order_id")
     private String refundedOrderId;
 
     public String getIsSynced() {

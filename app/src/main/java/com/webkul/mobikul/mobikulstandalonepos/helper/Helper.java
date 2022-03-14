@@ -31,6 +31,7 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.j256.ormlite.support.ConnectionSource;
 import com.webkul.mobikul.mobikulstandalonepos.BuildConfig;
 import com.webkul.mobikul.mobikulstandalonepos.R;
 import com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity;
@@ -74,9 +75,12 @@ public class Helper {
 
     private static Helper helper;
     public static final String FONT1 = "resources/fonts/PlayfairDisplay-Regular.ttf";
-    public static String DB_PATH = "/data/data/" + BuildConfig.APPLICATION_ID + "/databases/";
+  public static String DB_PATH = "/data/data/" + BuildConfig.APPLICATION_ID + "/databases/";
+    //public static String DB_PATH = "assets/";
     public static String DB_NAME = "db_pos.db";
     public static String DB_NAME_IMAGES = "db_pos_images.zip";
+
+    public static ConnectionSource defaultCon;
 
     public static synchronized Helper getInstanse() {
         if (helper == null)
@@ -182,6 +186,11 @@ public class Helper {
             }
         }
         return returnTime;
+    }
+
+    public static ConnectionSource setDefaultConnection(ConnectionSource source){
+        defaultCon= source;
+        return defaultCon;
     }
 
     public static String getCurrentDate() {

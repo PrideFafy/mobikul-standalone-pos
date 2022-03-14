@@ -1,29 +1,31 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+
 import android.databinding.BaseObservable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /**
  * Created by aman.gupta on 14/3/18. @Webkul Software Private limited
  */
-@Entity(tableName = "Currency")
+@Entity(name = "Currency")
 public class Currency extends BaseObservable {
-    @PrimaryKey
-    @ColumnInfo(name = "code")
+    @Id
+    @Column(name = "code")
     private String code;
-    @ColumnInfo(name = "name")
+    @Column(name = "name")
     private String name;
-    @ColumnInfo(name = "symbol")
+    @Column(name = "symbol")
     private String symbol;
-    @ColumnInfo(name = "flag")
+    @Column(name = "flag")
     private int flag = -1;
-    @ColumnInfo(name = "rate")
+    @Column(name = "rate")
     private float rate;
-    @ColumnInfo(name = "formated_rate")
+    @Column(name = "formated_rate")
     private String formatedRate;
-    @ColumnInfo(name = "selected")
+    @Column(name = "selected")
     private boolean isSelected;
 
     public String getCode() {

@@ -1,9 +1,7 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
+
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.util.Log;
@@ -14,34 +12,41 @@ import java.io.Serializable;
 
 import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.TAG;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * Created by aman.gupta on 6/1/18.
  */
-@Entity(tableName = "Category")
+@Entity(name = "Category")
 public class Category extends BaseObservable implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "nadministrator_id_seq")
     private int cId;
 
-    @ColumnInfo(name = "category_name")
+    @Column(name = "category_name")
     private String categoryName;
 
-    @ColumnInfo(name = "is_active")
+    @Column(name = "is_active")
     private boolean active;
 
-    @ColumnInfo(name = "is_include_in_drawer_menu")
+    @Column(name = "is_include_in_drawer_menu")
     private boolean includeInDrawerMenu;
 
-    @ColumnInfo(name = "category_icon")
+    @Column(name = "category_icon")
     private int icon;
 
-    @ColumnInfo(name = "level")
+    @Column(name = "level")
     private int level;
 
-    @ColumnInfo(name = "parent_id")
+    @Column(name = "parent_id")
     private int parentId;
 
-    @ColumnInfo(name = "path")
+    @Column(name = "path")
     private String path;
 
     @Ignore

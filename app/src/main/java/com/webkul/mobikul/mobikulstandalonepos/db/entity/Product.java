@@ -1,9 +1,8 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
+
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
+
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.databinding.BaseObservable;
@@ -28,11 +27,17 @@ import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.getC
 import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_10_SKU_ALLREADY_EXIST;
 import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_9_CUSTOMER_ALL_READY_EXIST;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * Created by aman.gupta on 9/1/18.
  */
 
-@Entity(tableName = "Product")
+@Entity(name = "Product")
 public class Product extends BaseObservable implements Serializable, Parcelable {
     @Ignore
     private Context context;
@@ -46,70 +51,71 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
         this.context = context;
     }
 
-    @PrimaryKey(autoGenerate = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "nadministrator_id_seq")
     private int pId;
 
-    @ColumnInfo(name = "product_name")
+    @Column(name = "product_name")
     private String productName;
 
-    @ColumnInfo(name = "product_s_deccription")
+    @Column(name = "product_s_deccription")
     private String productShortDes;
 
-    @ColumnInfo(name = "sku")
+    @Column(name = "sku")
     private String sku;
 
-    @ColumnInfo(name = "is_enabled")
+    @Column(name = "is_enabled")
     private boolean isEnabled;
 
-    @ColumnInfo(name = "price")
+    @Column(name = "price")
     private String price;
 
-    @ColumnInfo(name = "formatted_price")
+    @Column(name = "formatted_price")
     private String formattedPrice;
 
-    @ColumnInfo(name = "special_price")
+    @Column(name = "special_price")
     private String specialPrice;
 
-    @ColumnInfo(name = "formatted_special_price")
+    @Column(name = "formatted_special_price")
     private String formattedSpecialPrice;
 
-    @ColumnInfo(name = "is_taxable_goods_applied")
+    @Column(name = "is_taxable_goods_applied")
     private boolean isTaxableGoodsApplied;
 
     @TypeConverters(DataConverter.class)
-    @ColumnInfo(name = "product_tax")
+    @Column(name = "product_tax")
     private Tax productTax;
 
-    @ColumnInfo(name = "track_inventory")
+    @Column(name = "track_inventory")
     private boolean trackInventory;
 
-    @ColumnInfo(name = "quantity")
+    @Column(name = "quantity")
     private String quantity;
 
-    @ColumnInfo(name = "stock_availability")
+    @Column(name = "stock_availability")
     private boolean stock;
 
-    @ColumnInfo(name = "discount")
+    @Column(name = "discount")
     private float discount;
 
-    @ColumnInfo(name = "formatted_discount")
+    @Column(name = "formatted_discount")
     private String formattedDiscount;
 
-    @ColumnInfo(name = "image")
+    @Column(name = "image")
     private String image;
 
-    @ColumnInfo(name = "weight")
+    @Column(name = "weight")
     private String weight;
 
-    @ColumnInfo(name = "barCode")
+    @Column(name = "barCode")
     private String barCode;
 
     @TypeConverters(DataConverter.class)
-    @ColumnInfo(name = "productCategories")
+    @Column(name = "productCategories")
     private List<ProductCategoryModel> productCategories;
 
     @TypeConverters(DataConverter.class)
-    @ColumnInfo(name = "options")
+    @Column(name = "options")
     private List<Options> options;
     @Ignore
     private String cartQty;
