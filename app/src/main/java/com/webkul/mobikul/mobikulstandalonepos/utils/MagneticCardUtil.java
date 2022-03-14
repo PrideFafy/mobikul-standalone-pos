@@ -11,6 +11,8 @@ import com.telpo.tps550.api.magnetic.MagneticCard;
 public class MagneticCardUtil {
     static Thread readThread;
 
+
+    //initialize MagneticCardDevice
     public static void init(final Context context){
         try {
             MagneticCard.open(context);
@@ -22,16 +24,19 @@ public class MagneticCardUtil {
         }
     }
 
+    //Start swipe read thread
     public static void swipe(){
         readThread = new ReadThread();
         readThread.start();
     }
 
+    //cancel read thread
     public static void cancel(){
         readThread.interrupt();
         readThread = null;
     }
 
+    //Message handler
     public static Handler getHandler(){
         return new Handler()
         {
@@ -39,6 +44,7 @@ public class MagneticCardUtil {
             @Override
             public void handleMessage(Message msg)
             {
+                //TracData is data returned after Swiping
                 String[] TracData = (String[])msg.obj;
                 for(int i=0; i<3; i++){
                     if(TracData[i] != null){
@@ -62,6 +68,7 @@ public class MagneticCardUtil {
         };
     }
 
+    //Close Magntic Card Device.. Even after you cancel th read thread you have to close device
     public static void close(){
         if (readThread != null)
         {
@@ -70,6 +77,7 @@ public class MagneticCardUtil {
         MagneticCard.close();
     }
 
+    //Read Thread fo listening to Mgnetic Card Device and return data
     private static class ReadThread extends Thread
     {
         String[] TracData = null;

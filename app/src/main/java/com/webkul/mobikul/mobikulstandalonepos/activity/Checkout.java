@@ -47,23 +47,23 @@ public class Checkout extends BaseActivity {
             cartData = (CartModel) getIntent().getExtras().getSerializable("cartData");
             checkoutBinding.setData(cartData);
         }
-        checkout=findViewById(R.id.cc_button);
-        checkout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            usbThermalPrinter.start(1);
-                            printExample(cartData);
-                        } catch (TelpoException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-            }
-        });
+//        checkout=findViewById(R.id.cc_button);
+//        checkout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            usbThermalPrinter.start(1);
+//                            printExample(cartData);
+//                        } catch (TelpoException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }).start();
+//            }
+//        });
         checkoutBinding.setVisibility(AppSharedPref.isCashEnabled(this, true));
         checkoutBinding.setHandler(new CheckoutHandler(this));
         checkoutBinding.setHasReturn(AppSharedPref.isReturnCart(this));
