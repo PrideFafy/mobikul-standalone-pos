@@ -1,17 +1,17 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
 
-import android.arch.persistence.room.Ignore;
+import static android.content.ContentValues.TAG;
 
+import android.arch.persistence.room.Ignore;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.util.Log;
 
-import com.webkul.mobikul.mobikulstandalonepos.BR;
+import com.j256.ormlite.table.DatabaseTable;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.OptionValuesDaoImpl;
 
 import java.io.Serializable;
-
-import static android.content.ContentValues.TAG;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +23,7 @@ import javax.persistence.Id;
  * Created by aman.gupta on 15/2/18. @Webkul Software Private limited
  */
 @Entity
+@DatabaseTable(daoClass = OptionValuesDaoImpl.class)
 public class OptionValues extends BaseObservable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "nadministrator_id_seq")
@@ -52,7 +53,7 @@ public class OptionValues extends BaseObservable implements Serializable {
 
     public void setOptionValueName(String optionValueName) {
         this.optionValueName = optionValueName;
-        notifyPropertyChanged(BR.optionValueName);
+        //notifyPropertyChanged(BR.optionValueName);
     }
 
 
@@ -97,7 +98,7 @@ public class OptionValues extends BaseObservable implements Serializable {
 
     public void setSelected(boolean isSelected) {
         this.selected = isSelected;
-        notifyPropertyChanged(BR.selected);
+        //notifyPropertyChanged(BR.selected);
     }
 
     public boolean isAddToCart() {

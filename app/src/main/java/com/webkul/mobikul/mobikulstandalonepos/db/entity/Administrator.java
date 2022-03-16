@@ -4,18 +4,17 @@ package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 import android.arch.persistence.room.Ignore;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.util.Log;
-import android.util.Patterns;
 
-import com.webkul.mobikul.mobikulstandalonepos.BR;
+import com.j256.ormlite.table.DatabaseTable;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.AdministratorDaoImpl;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity(name = "Administrator")
+
+@DatabaseTable( daoClass = AdministratorDaoImpl.class)
 public class Administrator extends BaseObservable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "nadministrator_id_seq")
@@ -52,7 +51,7 @@ public class Administrator extends BaseObservable {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-        notifyPropertyChanged(BR.firstName);
+        //notifyPropertyChanged(BR.firstName);
     }
 
     @Bindable({"displayError", "firstName"})
@@ -75,7 +74,7 @@ public class Administrator extends BaseObservable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-        notifyPropertyChanged(BR.lastName);
+       // notifyPropertyChanged(BR.lastName);
     }
 
     @Bindable({"displayError", "lastName"})
@@ -98,7 +97,7 @@ public class Administrator extends BaseObservable {
 
     public void setEmail(String email) {
         this.email = email;
-        notifyPropertyChanged(BR.email);
+       // notifyPropertyChanged(BR.email);
     }
 
     @Bindable({"displayError", "email"})
@@ -124,7 +123,7 @@ public class Administrator extends BaseObservable {
 
     public void setPassword(String password) {
         this.password = password;
-        notifyPropertyChanged(BR.password);
+        //notifyPropertyChanged(BR.password);
     }
 
     @Bindable({"displayError", "password"})
@@ -145,7 +144,7 @@ public class Administrator extends BaseObservable {
 
     public void setDisplayError(boolean displayError) {
         this.displayError = displayError;
-        notifyPropertyChanged(BR.displayError);
+       // notifyPropertyChanged(BR.displayError);
     }
 
     @Bindable
@@ -157,7 +156,7 @@ public class Administrator extends BaseObservable {
 
     public void setUsername(String username) {
         this.username = username;
-        notifyPropertyChanged(BR.username);
+        //notifyPropertyChanged(BR.username);
     }
 
     @Bindable
@@ -169,6 +168,6 @@ public class Administrator extends BaseObservable {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
-        notifyPropertyChanged(BR.newPassword);
+        //notifyPropertyChanged(BR.newPassword);
     }
 }

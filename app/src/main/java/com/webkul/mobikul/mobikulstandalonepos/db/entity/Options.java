@@ -2,13 +2,11 @@ package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
 
 import android.arch.persistence.room.Ignore;
-
-import android.arch.persistence.room.TypeConverters;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
-import com.webkul.mobikul.mobikulstandalonepos.BR;
-import com.webkul.mobikul.mobikulstandalonepos.db.converters.DataConverter;
+import com.j256.ormlite.table.DatabaseTable;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.OptionDaoImpl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,6 +22,7 @@ import javax.persistence.Id;
  * Created by aman.gupta on 15/2/18. @Webkul Software Private limited
  */
 @Entity
+@DatabaseTable(daoClass = OptionDaoImpl.class)
 public class Options extends BaseObservable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "nadministrator_id_seq")
@@ -74,7 +73,7 @@ public class Options extends BaseObservable implements Serializable {
 
     public void setOptionName(String optionName) {
         this.optionName = optionName;
-        notifyPropertyChanged(BR.optionName);
+        //notifyPropertyChanged(BR.optionName);
     }
 
     @Bindable
@@ -86,7 +85,7 @@ public class Options extends BaseObservable implements Serializable {
 
     public void setType(String type) {
         this.type = type;
-        notifyPropertyChanged(BR.type);
+        //notifyPropertyChanged(BR.type);
     }
 
     @Bindable
@@ -100,7 +99,7 @@ public class Options extends BaseObservable implements Serializable {
 
     public void setOptionValues(List<OptionValues> optionValues) {
         this.optionValues = optionValues;
-        notifyPropertyChanged(BR.optionValues);
+        //notifyPropertyChanged(BR.optionValues);
     }
 
     public int getSortOrder() {
@@ -118,7 +117,7 @@ public class Options extends BaseObservable implements Serializable {
 
     public void setDisplayError(boolean displayError) {
         this.displayError = displayError;
-        notifyPropertyChanged(BR.displayError);
+        //notifyPropertyChanged(BR.displayError);
     }
 
     @Bindable
@@ -128,6 +127,6 @@ public class Options extends BaseObservable implements Serializable {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
-        notifyPropertyChanged(BR.selected);
+       // notifyPropertyChanged(BR.selected);
     }
 }

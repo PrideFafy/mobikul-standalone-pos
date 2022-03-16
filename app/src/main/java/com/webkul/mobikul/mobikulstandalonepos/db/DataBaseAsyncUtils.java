@@ -1,14 +1,50 @@
 package com.webkul.mobikul.mobikulstandalonepos.db;
 
+import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.TAG;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.ERROR_CODE;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.ERROR_MSG;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.ERROR_MSG_2;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_10_SKU_ALLREADY_EXIST;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_1_ADD_HOLD_CART;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_1_ADD_OPTION;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_1_ADD_TAX_RATE;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_1_SIGN_UP;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_1_UPDATE_ADMIN_DETAILS;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_2_DELETE_OPTION;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_2_DELETE_TAX;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_2_SIGN_IN;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_3_ADD_CATEGORY;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_3_UPDATE_OPTION;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_3_UPDATE_TAX;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_4_UPDATE_CATEGORY;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_5_DELETE_CATEGORY;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_6_ADD_CUSTOMER;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_6_ADD_PRODUCT;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_7_DELETE_CUSTOMER;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_7_DELETE_PRODUCT;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_8_UPDATE_CUSTOMER;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_8_UPDATE_PRODUCT;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_9_CUSTOMER_ALL_READY_EXIST;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_9_ORDER_PLACED;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.support.ConnectionSource;
 import com.webkul.mobikul.mobikulstandalonepos.db.converters.DataConverter;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.AdministratorDao;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.CashDrawerDao;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.CategoryDao;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.CustomerDao;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.HoldCartDao;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.OptionDao;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.OrderDao;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.ProductDao;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.TaxDao;
 import com.webkul.mobikul.mobikulstandalonepos.db.entity.Administrator;
 import com.webkul.mobikul.mobikulstandalonepos.db.entity.CashDrawerModel;
 import com.webkul.mobikul.mobikulstandalonepos.db.entity.Category;
@@ -19,14 +55,11 @@ import com.webkul.mobikul.mobikulstandalonepos.db.entity.OrderEntity;
 import com.webkul.mobikul.mobikulstandalonepos.db.entity.Product;
 import com.webkul.mobikul.mobikulstandalonepos.db.entity.Tax;
 import com.webkul.mobikul.mobikulstandalonepos.db.model.NAdministrator;
-import com.webkul.mobikul.mobikulstandalonepos.helper.AppSharedPref;
 import com.webkul.mobikul.mobikulstandalonepos.helper.Helper;
 import com.webkul.mobikul.mobikulstandalonepos.interfaces.DataBaseCallBack;
 
+import java.sql.SQLException;
 import java.util.List;
-
-import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.TAG;
-import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.*;
 
 /**
  * Created by aman.gupta on 5/1/18.
@@ -45,19 +78,22 @@ public class DataBaseAsyncUtils {
             Administrator> {
 
         private final DataBaseCallBack dataBaseCallBack;
-        private AppDatabase db;
-        private ORMDataSource dataSource;
+       // private AppDatabase db;
+        private final ConnectionSource dataSource;
 
-        GetAdminByEmailAsyncTask(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        GetAdminByEmailAsyncTask(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+           // db = userDatabase;
             this.dataBaseCallBack = dataBaseCallBack;
+            this.dataSource = dataSource;
         }
 
         @Override
         protected Administrator doInBackground(Administrator... administrators) {
             Administrator administrator;
             try {
-                administrator = db.administratorDao().findByEmail(administrators[0].getEmail(), administrators[0].getPassword());
+                AdministratorDao administratorDao
+                        = DaoManager.createDao(dataSource, Administrator.class);
+                administrator = administratorDao.findByEmail(administrators[0].getEmail(), administrators[0].getPassword());
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -79,10 +115,11 @@ public class DataBaseAsyncUtils {
             Administrator> {
 
         private final DataBaseCallBack dataBaseCallBack;
-        private AppDatabase db;
+       // private AppDatabase db;
+       private final ConnectionSource dataSource;
 
-        GetAllAdminAsyncTask(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        GetAllAdminAsyncTask(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
@@ -90,7 +127,9 @@ public class DataBaseAsyncUtils {
         protected Administrator doInBackground(Void... voids) {
             Administrator administrator;
             try {
-                administrator = db.administratorDao().getAll();
+                AdministratorDao administratorDao
+                        = DaoManager.createDao(dataSource, Administrator.class);
+                administrator = administratorDao.getAll();
                 NAdministrator nAdministrator ;
 
                 Dao<NAdministrator,Integer> nAdministratorsDao =
@@ -118,18 +157,20 @@ public class DataBaseAsyncUtils {
     public class AddAdminAsyncTask extends AsyncTask<Administrator, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public AddAdminAsyncTask(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public AddAdminAsyncTask(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Boolean doInBackground(Administrator... administrators) {
             try {
-                db.administratorDao().insertAll(administrators);
+                AdministratorDao administratorDao
+                        = DaoManager.createDao(dataSource, Administrator.class);
+                administratorDao.insertAll(administrators);
                 Dao<NAdministrator,Integer> nAdministratorsDao =
                         DaoManager.createDao(Helper.defaultCon, NAdministrator.class);
                 NAdministrator nAdministrator = new NAdministrator();
@@ -159,18 +200,20 @@ public class DataBaseAsyncUtils {
     public class UpdateAdmin extends AsyncTask<Administrator, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public UpdateAdmin(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public UpdateAdmin(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+           this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Boolean doInBackground(Administrator... administrator) {
             try {
-                db.administratorDao().updateAdminById(administrator[0].getFirstName(), administrator[0].getLastName(), administrator[0].getUsername(), administrator[0].getUid());
+                AdministratorDao administratorDao
+                        = DaoManager.createDao(dataSource, Administrator.class);
+                administratorDao.updateAdminById(administrator[0].getFirstName(), administrator[0].getLastName(), administrator[0].getUsername(), administrator[0].getUid());
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -191,18 +234,19 @@ public class DataBaseAsyncUtils {
     public class AddCategoryAsyncTask extends AsyncTask<Category, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public AddCategoryAsyncTask(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public AddCategoryAsyncTask(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource =dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Boolean doInBackground(Category... categories) {
             try {
-                db.categoryDao().insertAll(categories);
+                CategoryDao categoryDao = DaoManager.createDao(dataSource, Category.class);
+                categoryDao.insertAll(categories);
             } catch (Exception e) {
                 return false;
             }
@@ -222,18 +266,24 @@ public class DataBaseAsyncUtils {
     public class GetCategoryAsyncTask extends AsyncTask<Void, Void,
             List<Category>> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetCategoryAsyncTask(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetCategoryAsyncTask(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+           this.dataSource =dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected List<Category> doInBackground(Void... voids) {
-            List<Category> categories = db.categoryDao().getAll();
-            return categories;
+            try {
+                CategoryDao categoryDao = DaoManager.createDao(dataSource, Category.class);
+                List<Category> categories = categoryDao.getAll();
+                return categories;
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            return  null;
         }
 
         @Override
@@ -251,18 +301,26 @@ public class DataBaseAsyncUtils {
     public class GetDrawerIncludedCategories extends AsyncTask<Void, Void,
             List<Category>> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetDrawerIncludedCategories(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetDrawerIncludedCategories(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected List<Category> doInBackground(Void... voids) {
-            List<Category> categories = db.categoryDao().getCategoryIncludedInDrawerMenu(true, true);
-            return categories;
+            try {
+                CategoryDao categoryDao = DaoManager.createDao(dataSource, Category.class);
+                List<Category> categories = categoryDao.getCategoryIncludedInDrawerMenu(true, true);
+                return categories;
+            } catch (SQLException throwables) {
+
+                throwables.printStackTrace();
+                return null;
+            }
+
         }
 
         @Override
@@ -279,18 +337,19 @@ public class DataBaseAsyncUtils {
     public class UpdateCategoryById extends AsyncTask<Category, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public UpdateCategoryById(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public UpdateCategoryById(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Boolean doInBackground(Category... categories) {
             try {
-                db.categoryDao().updateCategoryById(categories[0].getCategoryName(), categories[0].isActive(), categories[0].isIncludeInDrawerMenu(), categories[0].getCId());
+                CategoryDao categoryDao = DaoManager.createDao(dataSource, Category.class);
+                categoryDao.updateCategoryById(categories[0].getCategoryName(), categories[0].isActive(), categories[0].isIncludeInDrawerMenu(), categories[0].getCId());
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -312,18 +371,19 @@ public class DataBaseAsyncUtils {
     public class DeleteCategoryById extends AsyncTask<Category, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public DeleteCategoryById(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public DeleteCategoryById(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Boolean doInBackground(Category... categories) {
             try {
-                db.categoryDao().delete(categories[0]);
+                CategoryDao categoryDao = DaoManager.createDao(dataSource, Category.class);
+               categoryDao.delete(categories[0]);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -345,7 +405,7 @@ public class DataBaseAsyncUtils {
     public class AddProductAsyncTask extends AsyncTask<Product, Void,
             Long> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
         @Override
@@ -353,8 +413,8 @@ public class DataBaseAsyncUtils {
             super.onPreExecute();
         }
 
-        public AddProductAsyncTask(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public AddProductAsyncTask(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
@@ -362,7 +422,8 @@ public class DataBaseAsyncUtils {
         protected Long doInBackground(Product... products) {
             long[] id;
             try {
-                id = db.productDao().insertAll(products);
+                ProductDao productDao = DaoManager.createDao(dataSource, Product.class);
+                id = productDao.insertAll(products);
             } catch (Exception e) {
                 e.printStackTrace();
                 return Long.valueOf(0);
@@ -383,13 +444,13 @@ public class DataBaseAsyncUtils {
     public class UpdateProductImages extends AsyncTask<Void, Void,
             Boolean> {
 
-        private AppDatabase db;
-        private String imagePath;
-        private Long pId;
-        private DataBaseCallBack callBack;
+        private final ConnectionSource dataSource;
+        private final String imagePath;
+        private final Long pId;
+        private final DataBaseCallBack callBack;
 
-        public UpdateProductImages(AppDatabase userDatabase, String imagePath, Long pId, DataBaseCallBack callBack) {
-            db = userDatabase;
+        public UpdateProductImages(ConnectionSource dataSource, String imagePath, Long pId, DataBaseCallBack callBack) {
+           this.dataSource = dataSource;
             this.imagePath = imagePath;
             this.pId = pId;
             this.callBack = callBack;
@@ -399,7 +460,8 @@ public class DataBaseAsyncUtils {
         protected Boolean doInBackground(Void... voids) {
             long[] id;
             try {
-                db.productDao().updateProductImages(imagePath, pId);
+                ProductDao productDao = DaoManager.createDao(dataSource, Product.class);
+               productDao.updateProductImages(imagePath, pId);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -420,18 +482,24 @@ public class DataBaseAsyncUtils {
     public class GetAllProducts extends AsyncTask<Void, Void,
             List<Product>> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetAllProducts(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetAllProducts(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected List<Product> doInBackground(Void... voids) {
-            List<Product> products = db.productDao().getAll();
-            return products;
+            try {
+                ProductDao productDao = DaoManager.createDao(dataSource, Product.class);
+                List<Product> products = productDao.getAll();
+                return products;
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            return  null;
         }
 
         @Override
@@ -447,18 +515,25 @@ public class DataBaseAsyncUtils {
     public class GetAllEnabledProducts extends AsyncTask<Void, Void,
             List<Product>> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetAllEnabledProducts(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetAllEnabledProducts(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected List<Product> doInBackground(Void... voids) {
-            List<Product> products = db.productDao().getEnabledProduct(true);
-            return products;
+            try {
+                ProductDao productDao = DaoManager.createDao(dataSource, Product.class);
+                List<Product> products = productDao.getEnabledProduct(true);
+                return products;
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            return null;
         }
 
         @Override
@@ -474,18 +549,24 @@ public class DataBaseAsyncUtils {
     public class GetAllLowStockProducts extends AsyncTask<Integer, Void,
             List<Product>> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetAllLowStockProducts(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetAllLowStockProducts(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected List<Product> doInBackground(Integer... qty) {
-            List<Product> products = db.productDao().getLowStockProducts(qty[0]);
-            return products;
+            try {
+                ProductDao productDao = DaoManager.createDao(dataSource, Product.class);
+                List<Product> products = productDao.getLowStockProducts(qty[0]);
+                return products;
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            return  null;
         }
 
         @Override
@@ -501,18 +582,19 @@ public class DataBaseAsyncUtils {
     public class UpdateProduct extends AsyncTask<Product, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public UpdateProduct(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public UpdateProduct(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+           this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Boolean doInBackground(Product... products) {
             try {
-                db.productDao().updateProduct(products[0].getImage()
+                ProductDao productDao = DaoManager.createDao(dataSource, Product.class);
+                productDao.updateProduct(products[0].getImage()
                         , products[0].isEnabled()
                         , products[0].getProductName()
                         , products[0].getSku()
@@ -548,12 +630,12 @@ public class DataBaseAsyncUtils {
     public class UpdateProductQty extends AsyncTask<Product, Void,
             Boolean> {
 
-        private Context context;
-        private AppDatabase db;
+        private final Context context;
+        private final ConnectionSource dataSource;
 
-        public UpdateProductQty(Context context, AppDatabase userDatabase) {
+        public UpdateProductQty(Context context, ConnectionSource dataSource) {
             this.context = context;
-            db = userDatabase;
+            this.dataSource = dataSource;
         }
 
         @Override
@@ -561,7 +643,8 @@ public class DataBaseAsyncUtils {
             try {
 //                Log.d(TAG, "doInBackground: qty" + Integer.parseInt(products[0].getQuantity()) + "---" + Integer.parseInt(products[0].getCartQty()));
 //                if (!AppSharedPref.isReturnCart(context))
-                db.productDao().updateProductQty(Integer.parseInt(products[0].getQuantity()) - Integer.parseInt(products[0].getCartQty()) + ""
+                ProductDao productDao = DaoManager.createDao(dataSource, Product.class);
+               productDao.updateProductQty(Integer.parseInt(products[0].getQuantity()) - Integer.parseInt(products[0].getCartQty()) + ""
                         , products[0].getPId());
 //                else
 //                    db.productDao().updateProductQty(Integer.parseInt(products[0].getQuantity()) + Integer.parseInt(products[0].getCartQty()) + ""
@@ -582,18 +665,19 @@ public class DataBaseAsyncUtils {
     public class DeleteProduct extends AsyncTask<Product, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public DeleteProduct(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public DeleteProduct(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Boolean doInBackground(Product... products) {
             try {
-                db.productDao().delete(products[0]);
+                ProductDao productDao = DaoManager.createDao(dataSource, Product.class);
+                productDao.delete(products[0]);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -615,11 +699,11 @@ public class DataBaseAsyncUtils {
     public class CheckSkuExist extends AsyncTask<String, Void,
             Product> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public CheckSkuExist(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public CheckSkuExist(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+           this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
@@ -627,7 +711,8 @@ public class DataBaseAsyncUtils {
         protected Product doInBackground(String... sku) {
             Product product = null;
             try {
-                product = db.productDao().checkSkuExist(sku[0]);
+                ProductDao productDao = DaoManager.createDao(dataSource, Product.class);
+                product = productDao.checkSkuExist(sku[0]);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -648,18 +733,24 @@ public class DataBaseAsyncUtils {
     public class GetAllCustomers extends AsyncTask<Void, Void,
             List<Customer>> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetAllCustomers(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetAllCustomers(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected List<Customer> doInBackground(Void... voids) {
-            List<Customer> customers = db.customerDao().getAll();
-            return customers;
+            try {
+                CustomerDao customerDao = DaoManager.createDao(dataSource, Customer.class);
+                List<Customer> customers = customerDao.getAll();
+                return customers;
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            return  null;
         }
 
         @Override
@@ -677,18 +768,19 @@ public class DataBaseAsyncUtils {
     public class AddCustomerAsyncTask extends AsyncTask<Customer, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public AddCustomerAsyncTask(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public AddCustomerAsyncTask(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+           this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Boolean doInBackground(Customer... customers) {
             try {
-                db.customerDao().insertAll(customers[0]);
+                CustomerDao customerDao = DaoManager.createDao(dataSource, Customer.class);
+                customerDao.insertAll(customers[0]);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -710,18 +802,19 @@ public class DataBaseAsyncUtils {
     public class UpdateCustomerAsyncTask extends AsyncTask<Customer, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public UpdateCustomerAsyncTask(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public UpdateCustomerAsyncTask(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Boolean doInBackground(Customer... customers) {
             try {
-                db.customerDao().updateCustomerById(customers[0].getFirstName()
+                CustomerDao customerDao = DaoManager.createDao(dataSource, Customer.class);
+                customerDao.updateCustomerById(customers[0].getFirstName()
                         , customers[0].getLastName()
                         , customers[0].getEmail()
                         , customers[0].getContactNumber()
@@ -751,18 +844,19 @@ public class DataBaseAsyncUtils {
     public class DeleteCustomer extends AsyncTask<Customer, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public DeleteCustomer(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public DeleteCustomer(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+           this.dataSource =dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Boolean doInBackground(Customer... customers) {
             try {
-                db.customerDao().delete(customers[0]);
+                CustomerDao customerDao = DaoManager.createDao(dataSource, Customer.class);
+                customerDao.delete(customers[0]);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -784,11 +878,11 @@ public class DataBaseAsyncUtils {
     public class CheckEmailExist extends AsyncTask<String, Void,
             Customer> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public CheckEmailExist(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public CheckEmailExist(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+           this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
@@ -796,7 +890,8 @@ public class DataBaseAsyncUtils {
         protected Customer doInBackground(String... email) {
             Customer customer;
             try {
-                customer = db.customerDao().checkEmailExist(email[0]);
+                CustomerDao customerDao = DaoManager.createDao(dataSource, Customer.class);
+                customer = customerDao.checkEmailExist(email[0]);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -818,11 +913,11 @@ public class DataBaseAsyncUtils {
     public class CheckNumberExist extends AsyncTask<String, Void,
             Customer> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public CheckNumberExist(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public CheckNumberExist(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
@@ -830,7 +925,8 @@ public class DataBaseAsyncUtils {
         protected Customer doInBackground(String... number) {
             Customer customer = null;
             try {
-                customer = db.customerDao().checkNumberExist(number[0]);
+                CustomerDao customerDao = DaoManager.createDao(dataSource, Customer.class);
+                customer = customerDao.checkNumberExist(number[0]);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -851,11 +947,11 @@ public class DataBaseAsyncUtils {
     public class GenerateOrderAsyncTask extends AsyncTask<OrderEntity, Void,
             Long> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GenerateOrderAsyncTask(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GenerateOrderAsyncTask(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
@@ -863,7 +959,8 @@ public class DataBaseAsyncUtils {
         protected Long doInBackground(OrderEntity... orders) {
             long[] id;
             try {
-                id = db.orderDao().insertAll(orders[0]);
+                OrderDao orderDao = DaoManager.createDao(dataSource, OrderEntity.class);
+                id = orderDao.insertAll(orders[0]);
                 Log.d(TAG, "doInBackground: " + id[0]);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -885,13 +982,13 @@ public class DataBaseAsyncUtils {
     public class UpdateRefundedOrderId extends AsyncTask<Void, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
         private String returnedOrderId;
         private String currentOrderId;
 
-        public UpdateRefundedOrderId(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack, String returnedOrderId, String currentOrderId) {
-            db = userDatabase;
+        public UpdateRefundedOrderId(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack, String returnedOrderId, String currentOrderId) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
             this.returnedOrderId = returnedOrderId;
             this.currentOrderId = currentOrderId;
@@ -903,7 +1000,8 @@ public class DataBaseAsyncUtils {
         protected Boolean doInBackground(Void... voids) {
             long[] id;
             try {
-                db.orderDao().updateRefundedOrderId(currentOrderId, Integer.parseInt(returnedOrderId) - 10000);
+                OrderDao orderDao = DaoManager.createDao(dataSource, OrderEntity.class);
+                orderDao.updateRefundedOrderId(currentOrderId, Integer.parseInt(returnedOrderId) - 10000);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -924,18 +1022,24 @@ public class DataBaseAsyncUtils {
     public class GetOrders extends AsyncTask<Void, Void,
             List<OrderEntity>> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetOrders(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetOrders(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected List<OrderEntity> doInBackground(Void... voids) {
-            List<OrderEntity> orders = db.orderDao().getAll();
-            return orders;
+            try {
+                OrderDao orderDao = DaoManager.createDao(dataSource, OrderEntity.class);
+                List<OrderEntity> orders = orderDao.getAll();
+                return orders;
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+           return  null;
         }
 
         @Override
@@ -951,18 +1055,24 @@ public class DataBaseAsyncUtils {
     public class GetOrdersById extends AsyncTask<String, Void,
             OrderEntity> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetOrdersById(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetOrdersById(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected OrderEntity doInBackground(String... orderIds) {
-            OrderEntity orders = db.orderDao().loadByIds(Integer.parseInt(orderIds[0]));
-            return orders;
+            try {
+                OrderDao orderDao = DaoManager.createDao(dataSource, OrderEntity.class);
+                OrderEntity orders = orderDao.loadByIds(Integer.parseInt(orderIds[0]));
+                return orders;
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+           return  null;
         }
 
         @Override
@@ -978,17 +1088,24 @@ public class DataBaseAsyncUtils {
     public class GetSearchData extends AsyncTask<String, Void,
             List<Product>> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetSearchData(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetSearchData(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected List<Product> doInBackground(String... texts) {
-            return db.productDao().getSearchData(texts[0]);
+
+            try {
+                ProductDao productDao = DaoManager.createDao(dataSource, Product.class);
+                return productDao.getSearchData(texts[0]);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            return  null;
         }
 
         @Override
@@ -1004,17 +1121,24 @@ public class DataBaseAsyncUtils {
     public class GetSearchOrders extends AsyncTask<String, Void,
             List<OrderEntity>> {
 
-        private AppDatabase db;
+        private final ConnectionSource dataSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetSearchOrders(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetSearchOrders(ConnectionSource dataSource, DataBaseCallBack dataBaseCallBack) {
+            this.dataSource = dataSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected List<OrderEntity> doInBackground(String... texts) {
-            return db.orderDao().getSearchOrders(texts[0]);
+
+            try {
+                OrderDao orderDao = DaoManager.createDao(dataSource, OrderEntity.class);
+                return orderDao.getSearchOrders(texts[0]);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            return  null;
         }
 
         @Override
@@ -1030,22 +1154,28 @@ public class DataBaseAsyncUtils {
     public class DeleteAllTables extends AsyncTask<Void, Void,
             Void> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
 
-        public DeleteAllTables(AppDatabase userDatabase) {
-            db = userDatabase;
+        public DeleteAllTables(ConnectionSource connectionSource) {
+            this.connectionSource = connectionSource;
         }
 
         @Override
         protected Void doInBackground(Void... texts) {
-            db.orderDao().delete();
-            db.productDao().delete();
-            db.categoryDao().delete();
-            db.customerDao().delete();
-            db.holdCartDao().delete();
-            db.optionDao().delete();
-            db.cashDrawerDao().delete();
-            db.taxDao().delete();
+            try {
+                OrderDao orderDao = DaoManager.createDao(connectionSource, OrderEntity.class);
+                orderDao.delete();
+            }catch (Exception e){
+
+            }
+//            db.orderDao().delete();
+//            db.productDao().delete();
+//            db.categoryDao().delete();
+//            db.customerDao().delete();
+//            db.holdCartDao().delete();
+//            db.optionDao().delete();
+//            db.cashDrawerDao().delete();
+//            db.taxDao().delete();
             return null;
         }
     }
@@ -1053,11 +1183,11 @@ public class DataBaseAsyncUtils {
     public class AddCartDataToHoldCart extends AsyncTask<HoldCart, Void,
             Long> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public AddCartDataToHoldCart(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public AddCartDataToHoldCart(ConnectionSource connectionSource, DataBaseCallBack dataBaseCallBack) {
+            this.connectionSource = connectionSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
@@ -1065,7 +1195,8 @@ public class DataBaseAsyncUtils {
         protected Long doInBackground(HoldCart... holdCarts) {
             long[] id;
             try {
-                id = db.holdCartDao().insertAll(holdCarts[0]);
+                HoldCartDao holdCartDao = DaoManager.createDao(connectionSource, HoldCart.class);
+                id = holdCartDao.insertAll(holdCarts[0]);
                 Log.d(TAG, "doInBackground: " + id[0]);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1087,17 +1218,24 @@ public class DataBaseAsyncUtils {
     public class GetHoldCartData extends AsyncTask<Void, Void,
             List<HoldCart>> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetHoldCartData(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetHoldCartData(ConnectionSource connectionSource, DataBaseCallBack dataBaseCallBack) {
+            this.connectionSource = connectionSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected List<HoldCart> doInBackground(Void... voids) {
-            List<HoldCart> holdCarts = db.holdCartDao().getAll();
+
+            List<HoldCart> holdCarts = null;
+            try {
+                HoldCartDao holdCartDao = DaoManager.createDao(connectionSource, HoldCart.class);
+                holdCarts = holdCartDao.getAll();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             return holdCarts;
         }
 
@@ -1114,16 +1252,17 @@ public class DataBaseAsyncUtils {
     public class DeleteHoldCartById extends AsyncTask<HoldCart, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
 
-        public DeleteHoldCartById(AppDatabase userDatabase) {
-            db = userDatabase;
+        public DeleteHoldCartById(ConnectionSource connectionSource) {
+            this.connectionSource = connectionSource;
         }
 
         @Override
         protected Boolean doInBackground(HoldCart... holdCarts) {
             try {
-                db.holdCartDao().delete(holdCarts[0].getHoldCartId() - 12000);
+                HoldCartDao holdCartDao = DaoManager.createDao(connectionSource, HoldCart.class);
+                holdCartDao.delete(holdCarts[0].getHoldCartId() - 12000);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -1140,17 +1279,23 @@ public class DataBaseAsyncUtils {
     public class GetProductByBarcode extends AsyncTask<String, Void,
             Product> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetProductByBarcode(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetProductByBarcode(ConnectionSource connectionSource, DataBaseCallBack dataBaseCallBack) {
+            this.connectionSource = connectionSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Product doInBackground(String... texts) {
-            return db.productDao().getProductByBarcode(texts[0]);
+            try {
+                ProductDao productDao = DaoManager.createDao(connectionSource, Product.class);
+                return productDao.getProductByBarcode(texts[0]);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+           return  null;
         }
 
         @Override
@@ -1166,16 +1311,17 @@ public class DataBaseAsyncUtils {
     public class AddCashDrawerData extends AsyncTask<CashDrawerModel, Void,
             Void> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
 
-        public AddCashDrawerData(AppDatabase userDatabase) {
-            db = userDatabase;
+        public AddCashDrawerData(ConnectionSource connectionSource) {
+            this.connectionSource = connectionSource;
         }
 
         @Override
         protected Void doInBackground(CashDrawerModel... cashDrawerModels) {
             try {
-                db.cashDrawerDao().insertAll(cashDrawerModels[0]);
+                CashDrawerDao cashDrawerDao = DaoManager.createDao(connectionSource, CashDrawerModel.class);
+               cashDrawerDao.insertAll(cashDrawerModels[0]);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1186,19 +1332,20 @@ public class DataBaseAsyncUtils {
     public class UpdateCashData extends AsyncTask<CashDrawerModel, Void,
             Boolean> {
 
-        private AppDatabase db;
-        private DataBaseCallBack callBack;
+        private final ConnectionSource connectionSource;
+        private final DataBaseCallBack callBack;
 
-        public UpdateCashData(AppDatabase userDatabase, DataBaseCallBack callBack) {
-            db = userDatabase;
+        public UpdateCashData(ConnectionSource connectionSource, DataBaseCallBack callBack) {
+            this.connectionSource = connectionSource;
             this.callBack = callBack;
         }
 
         @Override
         protected Boolean doInBackground(CashDrawerModel... cashDrawerModel) {
             try {
+                CashDrawerDao cashDrawerDao = DaoManager.createDao(connectionSource, CashDrawerModel.class);
                 DataConverter converter = new DataConverter();
-                db.cashDrawerDao().updateCashDrawerModelByDate(cashDrawerModel[0].getClosingBalance()
+                cashDrawerDao.updateCashDrawerModelByDate(cashDrawerModel[0].getClosingBalance()
                         , cashDrawerModel[0].getNetRevenue()
                         , cashDrawerModel[0].getInAmount()
                         , cashDrawerModel[0].getOutAmount()
@@ -1229,17 +1376,23 @@ public class DataBaseAsyncUtils {
     public class GetCashDrawerDataByDate extends AsyncTask<String, Void,
             CashDrawerModel> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetCashDrawerDataByDate(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetCashDrawerDataByDate(ConnectionSource connectionSource, DataBaseCallBack dataBaseCallBack) {
+            this.connectionSource = connectionSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected CashDrawerModel doInBackground(String... date) {
-            return db.cashDrawerDao().loadAllByDate(date[0]);
+            try {
+                CashDrawerDao cashDrawerDao = DaoManager.createDao(connectionSource, CashDrawerModel.class);
+                return cashDrawerDao.loadAllByDate(date[0]);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+           return null;
         }
 
         @Override
@@ -1255,17 +1408,24 @@ public class DataBaseAsyncUtils {
     public class GetAllCashDrawerData extends AsyncTask<Void, Void,
             List<CashDrawerModel>> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetAllCashDrawerData(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetAllCashDrawerData(ConnectionSource connectionSource, DataBaseCallBack dataBaseCallBack) {
+            this.connectionSource = connectionSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected List<CashDrawerModel> doInBackground(Void... voids) {
-            return db.cashDrawerDao().getAll();
+
+            try {
+                CashDrawerDao cashDrawerDao = DaoManager.createDao(connectionSource, CashDrawerModel.class);
+                return cashDrawerDao.getAll();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            return null;
         }
 
         @Override
@@ -1281,18 +1441,24 @@ public class DataBaseAsyncUtils {
     public class AddOptions extends AsyncTask<Options, Void,
             Long> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource ;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public AddOptions(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public AddOptions(ConnectionSource connectionSource, DataBaseCallBack dataBaseCallBack) {
+           this.connectionSource = connectionSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Long doInBackground(Options... options) {
-            Long[] id = db.optionDao().insertAll(options);
-            return id[0];
+            try {
+                OptionDao optionDao = DaoManager.createDao(connectionSource, Options.class);
+                Long[] id = optionDao.insertAll(options);
+                return id[0];
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            return null;
         }
 
         @Override
@@ -1308,17 +1474,24 @@ public class DataBaseAsyncUtils {
     public class GetOptions extends AsyncTask<Void, Void,
             List<Options>> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetOptions(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetOptions(ConnectionSource connectionSource, DataBaseCallBack dataBaseCallBack) {
+            this.connectionSource = connectionSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected List<Options> doInBackground(Void... voids) {
-            return db.optionDao().getAll();
+
+            try {
+                OptionDao optionDao = DaoManager.createDao(connectionSource, Options.class);
+                return optionDao.getAll();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            return null;
         }
 
         @Override
@@ -1334,18 +1507,19 @@ public class DataBaseAsyncUtils {
     public class UpdateOptions extends AsyncTask<Options, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public UpdateOptions(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public UpdateOptions(ConnectionSource connectionSource, DataBaseCallBack dataBaseCallBack) {
+            this.connectionSource = connectionSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Boolean doInBackground(Options... options) {
             try {
-                db.optionDao().updateOptionsById(options[0].getOptionName()
+                OptionDao optionDao = DaoManager.createDao(connectionSource, Options.class);
+               optionDao.updateOptionsById(options[0].getOptionName()
                         , options[0].getType()
                         , (new DataConverter()).fromOptionValuesList(options[0].getOptionValues())
                         , options[0].getOptionId());
@@ -1370,18 +1544,19 @@ public class DataBaseAsyncUtils {
     public class DeleteOption extends AsyncTask<Options, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public DeleteOption(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public DeleteOption(ConnectionSource connectionSource, DataBaseCallBack dataBaseCallBack) {
+           this.connectionSource = connectionSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Boolean doInBackground(Options... options) {
             try {
-                db.optionDao().delete(options[0]);
+                OptionDao optionDao = DaoManager.createDao(connectionSource, Options.class);
+               optionDao.delete(options[0]);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -1404,17 +1579,24 @@ public class DataBaseAsyncUtils {
     public class AddTaxRate extends AsyncTask<Tax, Void,
             Long> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public AddTaxRate(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public AddTaxRate(ConnectionSource connectionSource, DataBaseCallBack dataBaseCallBack) {
+            this.connectionSource = connectionSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Long doInBackground(Tax... taxes) {
-            Long[] id = db.taxDao().insertAll(taxes);
+
+            Long[] id = new Long[0];
+            try {
+                TaxDao taxDao = DaoManager.createDao(connectionSource, Tax.class);
+                id = taxDao.insertAll(taxes);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             return id[0];
         }
 
@@ -1431,17 +1613,24 @@ public class DataBaseAsyncUtils {
     public class GetAllTaxes extends AsyncTask<Void, Void,
             List<Tax>> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetAllTaxes(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetAllTaxes(ConnectionSource connectionSource, DataBaseCallBack dataBaseCallBack) {
+            this.connectionSource = connectionSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected List<Tax> doInBackground(Void... voids) {
-            List<Tax> taxes = db.taxDao().getAll();
+
+            List<Tax> taxes = null;
+            try {
+                TaxDao taxDao = DaoManager.createDao(connectionSource, Tax.class);
+                taxes = taxDao.getAll();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             return taxes;
         }
 
@@ -1458,18 +1647,19 @@ public class DataBaseAsyncUtils {
     public class UpdateTaxRate extends AsyncTask<Tax, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public UpdateTaxRate(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public UpdateTaxRate(ConnectionSource connectionSource, DataBaseCallBack dataBaseCallBack) {
+            this.connectionSource = connectionSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Boolean doInBackground(Tax... taxes) {
             try {
-                db.taxDao().updateTaxById(taxes[0].getTaxName(), taxes[0].isEnabled(), taxes[0].getTaxRate(), taxes[0].getTaxId());
+                TaxDao taxDao = DaoManager.createDao(connectionSource, Tax.class);
+                taxDao.updateTaxById(taxes[0].getTaxName(), taxes[0].isEnabled(), taxes[0].getTaxRate(), taxes[0].getTaxId());
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -1491,17 +1681,24 @@ public class DataBaseAsyncUtils {
     public class GetAllEnabledTaxes extends AsyncTask<Void, Void,
             List<Tax>> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public GetAllEnabledTaxes(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public GetAllEnabledTaxes(ConnectionSource connectionSource, DataBaseCallBack dataBaseCallBack) {
+            this.connectionSource = connectionSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected List<Tax> doInBackground(Void... voids) {
-            List<Tax> tax = db.taxDao().getEnabledTax(true);
+
+            List<Tax> tax = null;
+            try {
+                TaxDao taxDao = DaoManager.createDao(connectionSource, Tax.class);
+                tax = taxDao.getEnabledTax(true);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             return tax;
         }
 
@@ -1519,18 +1716,19 @@ public class DataBaseAsyncUtils {
     public class DeleteTax extends AsyncTask<Tax, Void,
             Boolean> {
 
-        private AppDatabase db;
+        private final ConnectionSource connectionSource;
         private final DataBaseCallBack dataBaseCallBack;
 
-        public DeleteTax(AppDatabase userDatabase, DataBaseCallBack dataBaseCallBack) {
-            db = userDatabase;
+        public DeleteTax(ConnectionSource connectionSource, DataBaseCallBack dataBaseCallBack) {
+            this.connectionSource = connectionSource;
             this.dataBaseCallBack = dataBaseCallBack;
         }
 
         @Override
         protected Boolean doInBackground(Tax... taxes) {
             try {
-                db.taxDao().delete(taxes[0]);
+                TaxDao taxDao = DaoManager.createDao(connectionSource, Tax.class);
+                taxDao.delete(taxes[0]);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;

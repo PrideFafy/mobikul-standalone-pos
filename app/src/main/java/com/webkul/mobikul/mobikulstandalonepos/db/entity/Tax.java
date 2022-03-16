@@ -1,11 +1,11 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
 import android.arch.persistence.room.Ignore;
-
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
-import com.webkul.mobikul.mobikulstandalonepos.BR;
+import com.j256.ormlite.table.DatabaseTable;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.TaxDaoImpl;
 
 import java.io.Serializable;
 
@@ -19,6 +19,7 @@ import javax.persistence.Id;
  * Created by aman.gupta on 26/2/18. @Webkul Software Private limited
  */
 @Entity
+@DatabaseTable(daoClass = TaxDaoImpl.class)
 public class Tax extends BaseObservable implements Serializable {
 
     @Id
@@ -55,7 +56,7 @@ public class Tax extends BaseObservable implements Serializable {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        notifyPropertyChanged(BR.enabled);
+       // notifyPropertyChanged(BR.enabled);
     }
 
     public String getType() {
@@ -86,7 +87,7 @@ public class Tax extends BaseObservable implements Serializable {
 
     public void setTaxName(String taxName) {
         this.taxName = taxName;
-        notifyPropertyChanged(BR.taxName);
+        //notifyPropertyChanged(BR.taxName);
     }
 
     @Bindable
@@ -109,7 +110,7 @@ public class Tax extends BaseObservable implements Serializable {
 
     public void setTaxRate(String taxRate) {
         this.taxRate = taxRate;
-        notifyPropertyChanged(BR.taxRate);
+        //notifyPropertyChanged(BR.taxRate);
     }
 
     @Bindable
@@ -119,6 +120,6 @@ public class Tax extends BaseObservable implements Serializable {
 
     public void setDisplayError(boolean displayError) {
         this.displayError = displayError;
-        notifyPropertyChanged(BR.displayError);
+        //notifyPropertyChanged(BR.displayError);
     }
 }

@@ -1,10 +1,7 @@
 package com.webkul.mobikul.mobikulstandalonepos.model;
 
-import android.arch.persistence.room.Ignore;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-
-import com.webkul.mobikul.mobikulstandalonepos.BR;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
@@ -60,7 +57,7 @@ public class CashModel extends BaseObservable implements Serializable {
                 setChangeDueVisibility(false);
             }
         }
-        notifyPropertyChanged(BR.collectedCash);
+        //notifyPropertyChanged(BR.collectedCash);
     }
 
     @Bindable
@@ -72,7 +69,7 @@ public class CashModel extends BaseObservable implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
-        notifyPropertyChanged(BR.note);
+        //notifyPropertyChanged(BR.note);
     }
 
     @Bindable
@@ -84,7 +81,7 @@ public class CashModel extends BaseObservable implements Serializable {
 
     public void setChangeDue(String changeDue) {
         this.changeDue = changeDue;
-        notifyPropertyChanged(BR.changeDue);
+        //notifyPropertyChanged(BR.changeDue);
     }
 
     public String getTotal() {
@@ -102,7 +99,7 @@ public class CashModel extends BaseObservable implements Serializable {
 
     public void setChangeDueVisibility(boolean changeDueVisibility) {
         this.changeDueVisibility = changeDueVisibility;
-        notifyPropertyChanged(BR.changeDueVisibility);
+        //notifyPropertyChanged(BR.changeDueVisibility);
     }
 
     @Bindable
@@ -112,7 +109,7 @@ public class CashModel extends BaseObservable implements Serializable {
 
     public void setDisplayError(boolean displayError) {
         this.displayError = displayError;
-        notifyPropertyChanged(BR.displayError);
+        //notifyPropertyChanged(BR.displayError);
     }
 
     public String getFormatedTotal() {
@@ -132,7 +129,7 @@ public class CashModel extends BaseObservable implements Serializable {
 
     public void setFormattedCollectedCash(String formattedCollectedCash) {
         this.formattedCollectedCash = formattedCollectedCash;
-        notifyPropertyChanged(BR.formattedCollectedCash);
+       // notifyPropertyChanged(BR.formattedCollectedCash);
     }
 
     @Bindable
@@ -144,6 +141,6 @@ public class CashModel extends BaseObservable implements Serializable {
 
     public void setFormattedChangeDue(String formattedChangeDue) {
         this.formattedChangeDue = formattedChangeDue;
-        notifyPropertyChanged(BR.formattedChangeDue);
+       // notifyPropertyChanged(BR.formattedChangeDue);
     }
 }

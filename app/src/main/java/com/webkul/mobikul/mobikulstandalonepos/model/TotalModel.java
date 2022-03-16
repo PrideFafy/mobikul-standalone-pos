@@ -1,10 +1,7 @@
 package com.webkul.mobikul.mobikulstandalonepos.model;
 
-import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-
-import com.webkul.mobikul.mobikulstandalonepos.BR;
 
 import java.io.Serializable;
 
@@ -39,7 +36,7 @@ public class TotalModel extends BaseObservable implements Serializable {
 
     public void setSubTotal(String subTotal) {
         this.subTotal = subTotal;
-        notifyPropertyChanged(BR.subTotal);
+       // notifyPropertyChanged(BR.subTotal);
     }
 
     @Bindable
@@ -51,7 +48,7 @@ public class TotalModel extends BaseObservable implements Serializable {
 
     public void setTax(String tax) {
         this.tax = tax;
-        notifyPropertyChanged(BR.tax);
+        //notifyPropertyChanged(BR.tax);
     }
 
     @Bindable
@@ -74,7 +71,7 @@ public class TotalModel extends BaseObservable implements Serializable {
 
     public void setDiscount(String discount) {
         this.discount = discount;
-        notifyPropertyChanged(BR.discount);
+       // notifyPropertyChanged(BR.discount);
     }
 
     @Bindable
@@ -86,7 +83,7 @@ public class TotalModel extends BaseObservable implements Serializable {
 
     public void setGrandTotal(String grandTotal) {
         this.grandTotal = grandTotal;
-        notifyPropertyChanged(BR.grandTotal);
+        //notifyPropertyChanged(BR.grandTotal);
     }
 
     @Bindable
@@ -98,7 +95,7 @@ public class TotalModel extends BaseObservable implements Serializable {
 
     public void setRoundTotal(String roundTotal) {
         this.roundTotal = roundTotal;
-        notifyPropertyChanged(BR.roundTotal);
+       // notifyPropertyChanged(BR.roundTotal);
     }
 
     @Bindable
@@ -110,7 +107,7 @@ public class TotalModel extends BaseObservable implements Serializable {
 
     public void setQty(String qty) {
         this.qty = qty;
-        notifyPropertyChanged(BR.qty);
+        //notifyPropertyChanged(BR.qty);
     }
 
     @Bindable
@@ -123,7 +120,7 @@ public class TotalModel extends BaseObservable implements Serializable {
 
     public void setFormatedSubTotal(String formatedSubTotal) {
         this.formatedSubTotal = formatedSubTotal;
-        notifyPropertyChanged(BR.formatedSubTotal);
+       // notifyPropertyChanged(BR.formatedSubTotal);
     }
 
     @Bindable
@@ -136,7 +133,7 @@ public class TotalModel extends BaseObservable implements Serializable {
 
     public void setFormatedGrandTotal(String formatedGrandTotal) {
         this.formatedGrandTotal = formatedGrandTotal;
-        notifyPropertyChanged(BR.formatedGrandTotal);
+        //notifyPropertyChanged(BR.formatedGrandTotal);
     }
 
     @Bindable
@@ -149,7 +146,7 @@ public class TotalModel extends BaseObservable implements Serializable {
 
     public void setFormatedRoundTotal(String formatedRoundTotal) {
         this.formatedRoundTotal = formatedRoundTotal;
-        notifyPropertyChanged(BR.formatedRoundTotal);
+        //notifyPropertyChanged(BR.formatedRoundTotal);
     }
 
     public String getFormatedDiscount() {
@@ -182,7 +179,7 @@ public class TotalModel extends BaseObservable implements Serializable {
 
     public void setDisplayError(boolean displayError) {
         this.displayError = displayError;
-        notifyPropertyChanged(BR.displayError);
+        //notifyPropertyChanged(BR.displayError);
     }
 
     public float getTotalDiscountByProduct() {

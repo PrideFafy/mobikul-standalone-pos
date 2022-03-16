@@ -4,7 +4,9 @@ package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
 import android.arch.persistence.room.TypeConverters;
 
+import com.j256.ormlite.table.DatabaseTable;
 import com.webkul.mobikul.mobikulstandalonepos.db.converters.DataConverter;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.OrderDaoImpl;
 import com.webkul.mobikul.mobikulstandalonepos.model.CartModel;
 import com.webkul.mobikul.mobikulstandalonepos.model.CashModel;
 
@@ -20,6 +22,7 @@ import javax.persistence.Id;
  * Created by aman.gupta on 25/1/18. @Webkul Software Private limited
  */
 @Entity(name = "OrderEntity")
+@DatabaseTable(daoClass = OrderDaoImpl.class)
 public class OrderEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "nadministrator_id_seq")

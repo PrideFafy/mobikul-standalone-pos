@@ -1,16 +1,13 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
 import android.arch.persistence.room.Ignore;
-
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.util.Log;
 
-import com.webkul.mobikul.mobikulstandalonepos.BR;
+import com.j256.ormlite.table.DatabaseTable;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.CategoryDaoImpl;
 
 import java.io.Serializable;
-
-import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.TAG;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +19,7 @@ import javax.persistence.Id;
  * Created by aman.gupta on 6/1/18.
  */
 @Entity(name = "Category")
+@DatabaseTable(daoClass = CategoryDaoImpl.class)
 public class Category extends BaseObservable implements Serializable {
 
     @Id
@@ -100,7 +98,7 @@ public class Category extends BaseObservable implements Serializable {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
-        notifyPropertyChanged(BR.categoryName);
+       // notifyPropertyChanged(BR.categoryName);
     }
 
 
@@ -111,7 +109,7 @@ public class Category extends BaseObservable implements Serializable {
 
     public void setDisplayError(boolean displayError) {
         this.displayError = displayError;
-        notifyPropertyChanged(BR.displayError);
+       // notifyPropertyChanged(BR.displayError);
     }
 
 

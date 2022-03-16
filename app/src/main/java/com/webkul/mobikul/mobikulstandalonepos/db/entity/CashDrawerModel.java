@@ -1,12 +1,9 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
 
-
-
-import com.webkul.mobikul.mobikulstandalonepos.db.converters.DataConverter;
-import com.webkul.mobikul.mobikulstandalonepos.model.CartModel;
+import com.j256.ormlite.table.DatabaseTable;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.CashDrawerDaoImpl;
 import com.webkul.mobikul.mobikulstandalonepos.model.CashDrawerItems;
-import com.webkul.mobikul.mobikulstandalonepos.model.CashModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +19,7 @@ import javax.persistence.Id;
  * Created by aman.gupta on 15/2/18. @Webkul Software Private limited
  */
 @Entity
+@DatabaseTable( daoClass = CashDrawerDaoImpl.class)
 public class CashDrawerModel implements Serializable {
 
     @Id

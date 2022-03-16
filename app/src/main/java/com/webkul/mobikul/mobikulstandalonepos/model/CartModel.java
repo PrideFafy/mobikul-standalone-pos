@@ -3,7 +3,6 @@ package com.webkul.mobikul.mobikulstandalonepos.model;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
-import com.webkul.mobikul.mobikulstandalonepos.BR;
 import com.webkul.mobikul.mobikulstandalonepos.db.entity.Customer;
 import com.webkul.mobikul.mobikulstandalonepos.db.entity.Product;
 
@@ -48,6 +47,6 @@ public class CartModel extends BaseObservable implements Serializable {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-        notifyPropertyChanged(BR.customer);
+       // notifyPropertyChanged(BR.customer);
     }
 }

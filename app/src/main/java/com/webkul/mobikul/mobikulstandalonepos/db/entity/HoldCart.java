@@ -1,8 +1,8 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
 
-
-import com.webkul.mobikul.mobikulstandalonepos.db.converters.DataConverter;
+import com.j256.ormlite.table.DatabaseTable;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.HoldCartDaoImpl;
 import com.webkul.mobikul.mobikulstandalonepos.model.CartModel;
 
 import javax.persistence.Column;
@@ -15,6 +15,7 @@ import javax.persistence.Id;
  * Created by aman.gupta on 5/2/18. @Webkul Software Private limited
  */
 @Entity
+@DatabaseTable(daoClass = HoldCartDaoImpl.class)
 public class HoldCart {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "nadministrator_id_seq")

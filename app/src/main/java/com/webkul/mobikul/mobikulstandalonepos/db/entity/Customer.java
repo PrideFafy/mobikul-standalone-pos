@@ -1,25 +1,22 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
 
+import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.TAG;
+import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.getContext;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_9_CUSTOMER_ALL_READY_EXIST;
+
 import android.arch.persistence.room.Ignore;
-
-
-import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.util.Log;
 import android.util.Patterns;
 
-import com.webkul.mobikul.mobikulstandalonepos.BR;
-import com.webkul.mobikul.mobikulstandalonepos.R;
+import com.j256.ormlite.table.DatabaseTable;
 import com.webkul.mobikul.mobikulstandalonepos.db.DataBaseController;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.CustomerDaoImpl;
 import com.webkul.mobikul.mobikulstandalonepos.interfaces.DataBaseCallBack;
 
 import java.io.Serializable;
-
-import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.TAG;
-import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.getContext;
-import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_9_CUSTOMER_ALL_READY_EXIST;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,6 +29,7 @@ import javax.persistence.Id;
  */
 
 @Entity
+@DatabaseTable(daoClass = CustomerDaoImpl.class)
 public class Customer extends BaseObservable implements Serializable {
 
     @Id
@@ -101,7 +99,7 @@ public class Customer extends BaseObservable implements Serializable {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-        notifyPropertyChanged(BR.firstName);
+       // notifyPropertyChanged(BR.firstName);
     }
 
     @Bindable
@@ -113,11 +111,7 @@ public class Customer extends BaseObservable implements Serializable {
             DataBaseController.getInstanse().checkEmailExist(getContext(), email, new DataBaseCallBack() {
                 @Override
                 public void onSuccess(Object responseData, String successMsg) {
-                    if (((Customer) responseData) != null && ((Customer) responseData).getCustomerId() != getCustomerId()) {
-                        isEmailExist = true;
-                    } else {
-                        isEmailExist = false;
-                    }
+                    isEmailExist = ((Customer) responseData) != null && ((Customer) responseData).getCustomerId() != getCustomerId();
                     Log.d(TAG, "onSuccess: " + responseData);
                 }
 
@@ -148,7 +142,7 @@ public class Customer extends BaseObservable implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-        notifyPropertyChanged(BR.email);
+       // notifyPropertyChanged(BR.email);
     }
 
     @Bindable
@@ -160,11 +154,7 @@ public class Customer extends BaseObservable implements Serializable {
             DataBaseController.getInstanse().checkNumberExist(getContext(), contactNumber, new DataBaseCallBack() {
                 @Override
                 public void onSuccess(Object responseData, String successMsg) {
-                    if (responseData != null && ((Customer) responseData).getCustomerId() != getCustomerId()) {
-                        isNumberExist = true;
-                    } else {
-                        isNumberExist = false;
-                    }
+                    isNumberExist = responseData != null && ((Customer) responseData).getCustomerId() != getCustomerId();
                 }
 
                 @Override
@@ -192,7 +182,7 @@ public class Customer extends BaseObservable implements Serializable {
 
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
-        notifyPropertyChanged(BR.contactNumber);
+        //notifyPropertyChanged(BR.contactNumber);
     }
 
     @Bindable
@@ -215,7 +205,7 @@ public class Customer extends BaseObservable implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-        notifyPropertyChanged(BR.lastName);
+        //notifyPropertyChanged(BR.lastName);
     }
 
     @Bindable
@@ -225,7 +215,7 @@ public class Customer extends BaseObservable implements Serializable {
 
     public void setDisplayError(boolean displayError) {
         this.displayError = displayError;
-        notifyPropertyChanged(BR.displayError);
+        //notifyPropertyChanged(BR.displayError);
     }
 
     @Bindable

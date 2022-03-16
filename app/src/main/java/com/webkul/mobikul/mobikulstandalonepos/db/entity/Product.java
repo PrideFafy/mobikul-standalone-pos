@@ -1,8 +1,11 @@
 package com.webkul.mobikul.mobikulstandalonepos.db.entity;
 
 
-import android.arch.persistence.room.Ignore;
+import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.TAG;
+import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.getContext;
+import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_10_SKU_ALLREADY_EXIST;
 
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.databinding.BaseObservable;
@@ -11,21 +14,18 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import com.webkul.mobikul.mobikulstandalonepos.BR;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.DatabaseTable;
 import com.webkul.mobikul.mobikulstandalonepos.R;
 import com.webkul.mobikul.mobikulstandalonepos.db.DataBaseController;
 import com.webkul.mobikul.mobikulstandalonepos.db.converters.DataConverter;
+import com.webkul.mobikul.mobikulstandalonepos.db.dao.ProductDaoImpl;
 import com.webkul.mobikul.mobikulstandalonepos.interfaces.DataBaseCallBack;
 import com.webkul.mobikul.mobikulstandalonepos.model.ProductCategoryModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.TAG;
-import static com.webkul.mobikul.mobikulstandalonepos.activity.BaseActivity.getContext;
-import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_10_SKU_ALLREADY_EXIST;
-import static com.webkul.mobikul.mobikulstandalonepos.constants.ApplicationConstants.SUCCESS_MSG_9_CUSTOMER_ALL_READY_EXIST;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,17 +38,25 @@ import javax.persistence.Id;
  */
 
 @Entity(name = "Product")
+@DatabaseTable(daoClass = ProductDaoImpl.class)
 public class Product extends BaseObservable implements Serializable, Parcelable {
     @Ignore
     private Context context;
     @Ignore
     private boolean isSkuExist;
 
+    @Ignore
+    private ConnectionSource connectionSource;
+
     public Product() {
     }
 
     public Product(Context context) {
         this.context = context;
+    }
+
+    public Product(ConnectionSource connectionSource){
+        this.connectionSource = connectionSource;
     }
 
     @Id
@@ -189,7 +197,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
 
     public void setProductName(String productName) {
         this.productName = productName;
-        notifyPropertyChanged(BR.productName);
+        //notifyPropertyChanged(BR.productName);
     }
 
     public String getProductShortDes() {
@@ -209,11 +217,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
             DataBaseController.getInstanse().checkSkuExist(getContext(), sku, new DataBaseCallBack() {
                 @Override
                 public void onSuccess(Object responseData, String successMsg) {
-                    if (responseData != null && ((Product) responseData).getPId() != getPId()) {
-                        isSkuExist = true;
-                    } else {
-                        isSkuExist = false;
-                    }
+                    isSkuExist = responseData != null && ((Product) responseData).getPId() != getPId();
                 }
 
                 @Override
@@ -241,7 +245,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
 
     public void setSku(String sku) {
         this.sku = sku;
-        notifyPropertyChanged(BR.sku);
+        //notifyPropertyChanged(BR.sku);
     }
 
     public boolean isEnabled() {
@@ -276,7 +280,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
         this.price = price;
         if (context != null)
             setFormattedPrice(context.getString(R.string.currency_symbol) + price);
-        notifyPropertyChanged(BR.price);
+        //notifyPropertyChanged(BR.price);
     }
 
     @Bindable
@@ -290,7 +294,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
         if (context != null)
             setFormattedSpecialPrice(context.getString(R.string.currency_symbol) + specialPrice);
         this.specialPrice = specialPrice;
-        notifyPropertyChanged(BR.specialPrice);
+        //notifyPropertyChanged(BR.specialPrice);
     }
 
     public boolean isTaxableGoodsApplied() {
@@ -329,7 +333,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
-        notifyPropertyChanged(BR.quantity);
+        //notifyPropertyChanged(BR.quantity);
     }
 
     public boolean isStock() {
@@ -350,7 +354,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
 
     public void setImage(String image) {
         this.image = image;
-        notifyPropertyChanged(BR.image);
+        //notifyPropertyChanged(BR.image);
     }
 
     @Bindable
@@ -373,7 +377,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
 
     public void setWeight(String weight) {
         this.weight = weight;
-        notifyPropertyChanged(BR.weight);
+       // notifyPropertyChanged(BR.weight);
     }
 
     @Bindable
@@ -383,7 +387,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
 
     public void setDisplayError(boolean displayError) {
         this.displayError = displayError;
-        notifyPropertyChanged(BR.displayError);
+        //notifyPropertyChanged(BR.displayError);
     }
 
     public List<ProductCategoryModel> getProductCategories() {
@@ -405,7 +409,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
 
     public void setCartQty(String cartQty) {
         this.cartQty = cartQty;
-        notifyPropertyChanged(BR.cartQty);
+        //notifyPropertyChanged(BR.cartQty);
     }
 
     public String getFormattedPrice() {
@@ -437,7 +441,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
 
     public void setBarCode(String barCode) {
         this.barCode = barCode;
-        notifyPropertyChanged(BR.barCode);
+        //notifyPropertyChanged(BR.barCode);
     }
 
     public List<Options> getOptions() {
@@ -457,7 +461,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
 
     public void setCartProductSubtotal(String cartProductSubtotal) {
         this.cartProductSubtotal = cartProductSubtotal;
-        notifyPropertyChanged(BR.cartProductSubtotal);
+        //notifyPropertyChanged(BR.cartProductSubtotal);
     }
 
     @Bindable
@@ -467,7 +471,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
 
     public void setProductTax(Tax productTax) {
         this.productTax = productTax;
-        notifyPropertyChanged(BR.productTax);
+        //notifyPropertyChanged(BR.productTax);
     }
 
     @Override
@@ -506,7 +510,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
 
     public void setFormattedCartProductSubtotal(String formattedCartProductSubtotal) {
         this.formattedCartProductSubtotal = formattedCartProductSubtotal;
-        notifyPropertyChanged(BR.formattedCartProductSubtotal);
+        //notifyPropertyChanged(BR.formattedCartProductSubtotal);
     }
 
     @Bindable
@@ -516,7 +520,7 @@ public class Product extends BaseObservable implements Serializable, Parcelable 
 
     public void setDiscount(float discount) {
         this.discount = discount;
-        notifyPropertyChanged(BR.discount);
+       // notifyPropertyChanged(BR.discount);
     }
 
     public String getFormattedDiscount() {

@@ -1,7 +1,9 @@
 package com.webkul.mobikul.mobikulstandalonepos.activity;
 
+import static com.webkul.mobikul.mobikulstandalonepos.db.AppDatabase.destroyDbInstance;
+import static com.webkul.mobikul.mobikulstandalonepos.db.POSConn.getPostDB;
+
 import android.annotation.SuppressLint;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,18 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.webkul.mobikul.mobikulstandalonepos.R;
-import com.webkul.mobikul.mobikulstandalonepos.db.AppDatabase;
 import com.webkul.mobikul.mobikulstandalonepos.db.POSConn;
-import com.webkul.mobikul.mobikulstandalonepos.helper.AppSharedPref;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-
-import static com.webkul.mobikul.mobikulstandalonepos.db.AppDatabase.destroyDbInstance;
-import static com.webkul.mobikul.mobikulstandalonepos.db.AppDatabase.getAppDatabase;
-import static com.webkul.mobikul.mobikulstandalonepos.db.POSConn.getPostDB;
 
 /**
  * Created by aman.gupta on 4/1/17. @Webkul Software Private limited
@@ -32,7 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static final String TAG = "BaseActivity";
     public SweetAlertDialog mSweetAlertDialog;
     public FragmentManager mSupportFragmentManager;
-    public AppDatabase db;
+   // public AppDatabase db;
     public static Context context;
     public POSConn posConn;
 
@@ -41,15 +36,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSupportFragmentManager = getSupportFragmentManager();
-        db = getDb();
         posConn = postDB();
+        //db = getDb();
+
         context = this;
         showBackButton(true);
     }
 
-    public AppDatabase getDb() {
-        return getAppDatabase(this);
-    }
+//    public AppDatabase getDb() {
+//        return getAppDatabase(this);
+//    }
 
     public POSConn postDB(){
         return getPostDB();
